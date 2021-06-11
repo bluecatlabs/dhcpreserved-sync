@@ -28,6 +28,9 @@ Updated Last Reserved UDF on 172.17.44.99 <Response [200]>
 Last DHCP reservation for 172.17.44.101 @ 2021-06-07 14:07:31
 Updated Last Reserved UDF on 172.17.44.101 <Response [200]>
 ```
+![alt text](Screenshot.png "Address Manager")
+
+
 ## NOTES
 * Requires port 80 to be open on the BlueCat DNS/DHCP Server firewall in order to communicate with the BlueCat Address Manager API
 * Should NOT require any pip installation of python libraries, python3 native libraries only
