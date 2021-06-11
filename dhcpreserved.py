@@ -24,16 +24,18 @@ import json
 import os
 import time
 import datetime
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Globals
 fixedIPaddress = []
 
 # Login to BAM returns auth token
 def login_bam(bamip,username,password):
-    url = "http://" + bamip + "/Services/REST/v1/login?username=" + username + "&password=" + password + "&"
+    url = "https://" + bamip + "/Services/REST/v1/login?username=" + username + "&password=" + password + "&"
     payload={}
     headers = {}
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = requests.request("GET", url, headers=headers, data=payload, verify=False)
     token = response.text
     token = token.replace('Session Token-> ','')
     token = token.replace(' <- for User : apiuser','')
@@ -46,11 +48,11 @@ def logout_bam(bamip,token):
     headers = {}
     token=token.replace('"','')
     headers['authorization'] = token
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = requests.request("GET", url, headers=headers, data=payload, verify=False)
 
 # Add a UDF Last Reservation to IP4 Addresses in BAM
 def addUserDefinedField(bamip,token):
-    url = "http://" + bamip + "/Services/REST/v1/addUserDefinedField?type=IP4Address"
+    url = "https://" + bamip + "/Services/REST/v1/addUserDefinedField?type=IP4Address"
     payload = json.dumps({
       "type": "TEXT",
       "defaultValue": "",
@@ -65,39 +67,39 @@ def addUserDefinedField(bamip,token):
     token=token.replace('"','')
     headers['authorization'] = token
     headers['Content-type'] = 'application/json'
-    response = requests.request("POST", url, headers=headers, data=payload)
+    response = requests.request("POST", url, headers=headers, data=payload, verify=False)
 
 # Function to return the network ID for a given IP address
 def getNetwork(bamip,token,ip_address,configid):
-    url = "http://" + bamip + "/Services/REST/v1/getIPRangedByIP?containerId=" + configid + "&type=IP4Network&address=" + ip_address + "&"
+    url = "https://" + bamip + "/Services/REST/v1/getIPRangedByIP?containerId=" + configid + "&type=IP4Network&address=" + ip_address + "&"
     payload = {}
     headers = {}
     token=token.replace('"','')
     headers['authorization'] = token
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = requests.request("GET", url, headers=headers, data=payload, verify=False)
     jsonResponse = response.json()
     id = jsonResponse['id']
     return id
 
 # Update an entity
 def updateEntity(bamip,token, entity):
-    url = "http://" + bamip + "/Services/REST/v1/update"
+    url = "https://" + bamip + "/Services/REST/v1/update"
     payload = {}
     headers = {}
     token=token.replace('"','')
     headers['authorization'] = token
     headers['Content-type'] = 'application/json'
-    response = requests.request("PUT", url, headers=headers, data=json.dumps(entity))
+    response = requests.request("PUT", url, headers=headers, data=json.dumps(entity),verify=False)
     return response
 
 # use getEntities to get the ID of the DHCP_RESERVED object with the passed IP
 def ProcessDHCPReservedUpdate(bamip,token,networkid,ip_address,update):
-    url = "http://" + bamip + "/Services/REST/v1/getEntities?parentId=" + str(networkid) + "&type=IP4Address&start=0&count=100000&"
+    url = "https://" + bamip + "/Services/REST/v1/getEntities?parentId=" + str(networkid) + "&type=IP4Address&start=0&count=100000&"
     payload = {}
     headers = {}
     token=token.replace('"','')
     headers['authorization'] = token
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = requests.request("GET", url, headers=headers, data=payload, verify=False)
     jsonResponse = response.json()
     for val in jsonResponse:
         props = val['properties']
@@ -172,12 +174,12 @@ def main():
         serverid_file = open(pathtoserverid,'r')
         serverid = serverid_file.read()
         serverid_file.close()
-        url = "http://172.17.44.90/Services/REST/v1/getParent?entityId=" + serverid + "&"
+        url = "https://172.17.44.90/Services/REST/v1/getParent?entityId=" + serverid + "&"
         payload = {}
         headers = {}
         mytoken=mytoken.replace('"','')
         headers['authorization'] = mytoken
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = requests.request("GET", url, headers=headers, data=payload, verify=False)
         jsonResponse = response.json()
         configid = jsonResponse['id']
     else:

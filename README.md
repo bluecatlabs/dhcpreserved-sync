@@ -31,7 +31,7 @@ Updated Last Reserved UDF on 172.17.44.101 <Response [200]>
 ![alt text](Screenshot.png "Address Manager")
 
 ## NOTES
-* Requires port 80 to be open on the BlueCat DNS/DHCP Server firewall in order to communicate with the BlueCat Address Manager API
+* Requires port 443 to be open on the BlueCat DNS/DHCP Server firewall in order to communicate with the BlueCat Address Manager API via HTTPS
 * Should NOT require any pip installation of python libraries, python3 native libraries only
 * Tested provisionally against Integrity 9.3 only, should function on Integrity 9.1+
 * Expected to be called periodically to update the Address Manager, only supports default DATETIME format and does NOT scan/decompress .gz syslog files only the current one
