@@ -218,7 +218,7 @@ def main():
         print ("Last DHCP reservation for " + x + " @ " + str(y))
         mynetwork = getNetwork(bamip, mytoken,str(ip),str(configid))
         id = ProcessDHCPReservedUpdate(bamip, mytoken, mynetwork,str(x),str(y))
-        print("Updating Last Reserved UDF on IP " + str(x) + " " + str(id))
+        print("Update Last Reserved UDF on IP " + str(x) + " " + str(id))
     logout_bam(bamip, mytoken)
     exit()
 
